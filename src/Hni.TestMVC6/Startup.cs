@@ -7,6 +7,8 @@ using Microsoft.AspNet.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Hni.TestMVC6.Models;
+using Microsoft.Data.Entity;
 
 namespace Hni.TestMVC6
 {
@@ -30,6 +32,11 @@ namespace Hni.TestMVC6
         {
             // Add framework services.
             services.AddMvc();
+
+            //Add Entity Framework DbContext that points to the existing database
+            services.AddEntityFramework()
+                .AddSqlServer()
+                .AddDbContext<SampleInspectionContext>(options => options.UseSqlServer(Configuration["connectionStrings:SampleInspectionContext"]));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
