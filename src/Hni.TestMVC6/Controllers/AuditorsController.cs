@@ -28,7 +28,7 @@ namespace Hni.TestMVC6.Controllers
         }
 
         // GET api/auditors/5
-        [HttpGet("{id}")]
+        [HttpGet("{id}",Name ="GetAuditor")]
         public IActionResult Get(int id)
         {
             Auditor auditor = _context.Auditor.Where(key => key.AuditorId == id).SingleOrDefault();
@@ -43,24 +43,30 @@ namespace Hni.TestMVC6.Controllers
         [HttpPost]
         public IActionResult Post([FromBody]Auditor auditor)
         {
-            if (auditor == null)
+            if (!ModelState.IsValid)
             {
-                return HttpBadRequest();
+                return HttpBadRequest(ModelState);
             }
+
             _context.Auditor.Add(auditor);
             _context.SaveChanges();
-            return new NoContentResult();
-            //return CreatedAtRoute("PostAuditor", new { Controller = "Auditors", id = auditor.AuditorId }, auditor);
+            //return new NoContentResult();
+            return CreatedAtRoute("GetAuditor", new { id = auditor.AuditorId }, auditor);
         }
 
         // PUT api/auditors/5 -- update
         [HttpPut("{id}")]
         public IActionResult Put(int id,[FromBody]Auditor auditor)
         {
-            if (auditor == null)
+            if (!ModelState.IsValid)
+            {
+                return HttpBadRequest(ModelState);
+            }
+            if (id != auditor.AuditorId)
             {
                 return HttpBadRequest();
             }
+
             Auditor auditorToBeUpdated = _context.Auditor.Where(key => key.AuditorId == id).SingleOrDefault();
             if(auditorToBeUpdated == null)
             {
