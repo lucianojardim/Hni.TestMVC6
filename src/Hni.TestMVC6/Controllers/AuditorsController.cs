@@ -50,7 +50,6 @@ namespace Hni.TestMVC6.Controllers
 
             _context.Auditor.Add(auditor);
             _context.SaveChanges();
-            //return new NoContentResult();
             return CreatedAtRoute("GetAuditor", new { id = auditor.AuditorId }, auditor);
         }
 
