@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Hni.TestMVC6.Models;
 using Microsoft.Data.Entity;
+using Microsoft.AspNet.Http;
 
 namespace Hni.TestMVC6
 {

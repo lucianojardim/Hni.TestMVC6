@@ -13,7 +13,7 @@ namespace Hni.TestMVC6.Controllers
     [Route("api/[controller]")]
     public class AuditorsController : Controller
     {
-        private SampleInspectionContext _context;
+        private readonly SampleInspectionContext _context;
 
         public AuditorsController(SampleInspectionContext context)
         {
