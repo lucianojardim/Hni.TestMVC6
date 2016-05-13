@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
 using Hni.TestMVC6.Models;
+using Microsoft.Extensions.Logging;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -14,10 +15,12 @@ namespace Hni.TestMVC6.Controllers
     public class AuditorsController : Controller
     {
         private readonly SampleInspectionContext _context;
+        private readonly ILogger _logger;
 
-        public AuditorsController(SampleInspectionContext context)
+        public AuditorsController(SampleInspectionContext context, ILogger<Auditor> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         // GET: api/auditors
@@ -50,6 +53,9 @@ namespace Hni.TestMVC6.Controllers
 
             _context.Auditor.Add(auditor);
             _context.SaveChanges();
+
+            this._logger.LogVerbose("Created Auditor {0},{1}", auditor.AuditorId.ToString(), auditor.AuditorName);
+
             return CreatedAtRoute("GetAuditor", new { id = auditor.AuditorId }, auditor);
         }
 
@@ -71,8 +77,12 @@ namespace Hni.TestMVC6.Controllers
             {
                 return HttpNotFound();
             }
+
+            this._logger.LogVerbose("Update Auditor {0} from {1} to {2}", auditor.AuditorId.ToString(), auditorToBeUpdated.AuditorName, auditor.AuditorName);
+
             auditorToBeUpdated.AuditorName = auditor.AuditorName;
             _context.SaveChanges();
+
             return new NoContentResult();
         }
 
@@ -87,6 +97,9 @@ namespace Hni.TestMVC6.Controllers
             }
             _context.Auditor.Remove(auditor);
             _context.SaveChanges();
+
+            this._logger.LogVerbose("Deleted Auditor {0},{1}", auditor.AuditorId.ToString(), auditor.AuditorName);
+
             return new NoContentResult();
         }
     }

@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Hni.TestMVC6.Models;
 using Microsoft.Data.Entity;
 using Microsoft.AspNet.Http;
+using Serilog;
 
 namespace Hni.TestMVC6
 {
@@ -45,6 +46,15 @@ namespace Hni.TestMVC6
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+
+            //Add Serilog
+            var log = new Serilog.LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.RollingFile(
+                    pathFormat: env.MapPath("MvcLibrary-{Date}.log"),
+                    outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} {SourceContext} [{Level}] {Message}{NewLine}{Exception}")
+                .CreateLogger();
+            loggerFactory.AddSerilog(log);
 
             app.UseIISPlatformHandler();
 
